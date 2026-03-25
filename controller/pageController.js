@@ -2,8 +2,8 @@ const fs = require("fs")
 const nodemailer = require("nodemailer")
 // model require
 const adminModel = require("../model/adminModel")
-
-
+const env=require("dotenv")
+env.config()
 
 const adminLoginShowFun = async (req, res) => {
 
@@ -51,7 +51,7 @@ const otpVerifyFun = (req, res) => {
         // console.log("client mail",req.body)
         // console.log("developer cookie mail",req.cookies)
 
-        if (req.body.adminOtp !== req.cookies.otp) {
+        if (req.body.adminOtp != req.cookies.otp) {
             console.log("otp not matched...")
             return res.redirect("/otpVerifyPage")
         }
@@ -111,12 +111,12 @@ const forgetPasswordVerifyEmailFun = async (req, res) => {
         const transport = nodemailer.createTransport({
             service: "gmail",
             auth: {
-                user: "sheetaldave0312@gmail.com",
-                pass: "dvxqmcmiwnddxdca"
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS
             }
         })
 
-        const otp = Math.floor(100000 + Math.random() * 90000)
+const otp = Math.floor(100000 + Math.random() * 900000)
         const info = await transport.sendMail({
             from: `"Admin Panel" <sheetaldave0312@gmail.com>`,
             to: req.body.email,
@@ -168,7 +168,7 @@ const forgetPasswordVerifyEmailFun = async (req, res) => {
         console.log("info", info.messageId)
 
         res.cookie("otp", otp)
-            /
+        
             res.cookie("id", existAdminInDataBase.id)
         return res.redirect("/otpVerifyPage")
 
