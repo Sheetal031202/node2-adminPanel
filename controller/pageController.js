@@ -101,7 +101,7 @@ const forgetPassSetPageShowFun = (req, res) => {
 const forgetPasswordVerifyEmailFun = async (req, res) => {
 
     try {
-        const existAdminInDataBase = await adminModel.findOne(req.body)
+const existAdminInDataBase = await adminModel.findOne({ email: req.body.email })
         console.log("exist admin mail", req.body)
 
         if (!existAdminInDataBase) {
